@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainMap.qml</file>
+        <file>ContextMenu.qml</file>
+        <file>MainMenu.qml</file>
+        <file>Marker.qml</file>
+        <file>image/marker.png</file>
+        <file>MarkerContextMenu.qml</file>
+        <file>LoadingView.qml</file>
+        <file>image/Other marker.png</file>
+        <file>image/gear.png</file>
+        <file>LogFiles/simplelog.txt</file>
+        <file>Bus.qml</file>
+        <file>image/bus.png</file>
+        <file>BusContextMenu.qml</file>
+        <file>GetCoordinateForm.qml</file>
+    </qresource>
+</RCC>

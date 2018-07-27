@@ -1,0 +1,64 @@
+#ifndef POSITIONSIGNALPLANNER_H
+#define POSITIONSIGNALPLANNER_H
+
+#include <QObject>
+#include <QThread>
+
+struct Taken { ///this save the status of the object to planner
+    int index;
+    bool isReadable;
+    bool isWasRead;
+    bool isThereSomeone;
+};
+
+class Marker;
+class Bus;
+class QTimer;
+class PositionSignalPlanner : public QThread
+{
+    Q_OBJECT
+public:
+    PositionSignalPlanner();
+    void stop();
+    bool getStopped() const {return stopped;}
+    void setObjectToPlanner(QHash<int, Marker*> &, int *);
+    void setObjectToPlanner(QHash<int, Bus*> &, int *);
+    void setCount(const int newCount);
+    int getCount() const {return (count) - 1;} // this return the number in format  where it start to count from zero
+                                               // only for handle the index
+protected:
+    void run();
+
+signals:
+    void start_();
+    void newPosition(int, double, double);
+    void countChanged();
+
+private:
+    QTimer *timer;
+    QHash<int, Marker*> *markerHash;
+    QHash<int, Bus*> *busHash;
+    int count; // WARNING this is the number of marker that we need to planner signal,
+               // if this number is incorrent can happpen bad thing
+    QString wwau; // what we are used // this say if we are planner a bus o a marker object
+               // 0 = Marker || 1 = Bus
+    int *indexArray;
+    struct Taken taken[100]; // that save the index of object,
+                             // if he want that we read the log file,
+                             // and if we already read you data in the circuit
+    bool volatile stopped;
+    bool out;
+    void restartTaken();
+    void updateTakenListIndex();
+    bool isChecked(int);
+    void setChecked(int, int);
+    bool allhaveBeenRead();
+
+public slots:
+    void resumen();
+
+private slots:
+    void checkNumOfObjectToPlanner(); // this check if there are object to planner
+};
+
+#endif // POSITIONSIGNALPLANNER_H

@@ -1,0 +1,23 @@
+#ifndef ADDRESWIDGET_H
+#define ADDRESWIDGET_H
+
+#include <QWidget>
+
+class QGroupBox;
+class QLabel;
+class AddresWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit AddresWidget(QWidget *parent = 0);
+    
+private:
+    QGroupBox *coordinat
+    QLabel *latitude;
+    QLabel *longitude;
+signals:
+
+public slots:
+};
+
+#endif // ADDRESWIDGET_H
