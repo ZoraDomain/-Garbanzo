@@ -12,8 +12,13 @@ Map {
     property int mousePosY
     property var infoCoordinate
 
+    property var resquests //this array is used for know who need the geocode model and emit his signal
+                           // 0 is for Coordinate&Address
+
     signal showContextMenu(variant coordinate)
     signal geocodeFinished()
+
+    signal coordinateAndAddressReady(variant coordinate, variant address) // this is for show Coordinate And address View
 
     property alias geocodeModel: geocodeModel
 
@@ -223,12 +228,24 @@ Map {
         return address
     }
 
+    function coordinateGeocode() {
+        var coordinate = {
+            latitude: geocodeModel.get(0).coordinate.latitude,
+            longitude: geocodeModel.get(0).coordinate.longitude
+        }
+        return coordinate
+    }
+
     function updateCoordinateInfo() {
         geocode(infoCoordinate)
     }
 
-    function showInfoLocation() {
-        geocoding.text = geocodeModel.get(0).address.street
+    function proceedToAllResquest() {
+        if (resquests[0] === 1) {
+            coordinateAndAddressReady(coordinateGeocode(), addressGeocode())
+            resquests[0] = 0;
+        }
+
     }
 
     function setBusFollowMe(index, set) {
@@ -250,6 +267,22 @@ Map {
 
     function update() {
         //point.radius -= map.zoomLevel * 2
+    }
+
+    function initResquests () {
+        var myArray = new Array
+        var lenght = 2 //this is the number of resquests
+
+        for (var i = 0; i <= lenght; i++) {
+            myArray[i] = 0;
+            resquests = myArray
+        }
+    }
+
+    function resquestCoordinateAndAddress() {
+        resquests[0] = 1
+        geocodeModel.query = mapMouseArea.lastCoordinate
+        geocodeModel.update()
     }
 
     zoomLevel: 10
@@ -278,6 +311,8 @@ Map {
     Component.onCompleted: {
         markers = new Array()
         buses = new Array()
+        resquests = new Array()
+        initResquests()
     }
 
     GeocodeModel {
@@ -535,7 +570,7 @@ Map {
         }
     }
 
-    onGeocodeFinished: showInfoLocation()
+    onGeocodeFinished: proceedToAllResquest()
     onMarkerGeocodeFinished: markerReady(mapMouseArea.lastCoordinate, reverseGeocode())
     onBusGeocodeFinished: busReady(mapMouseArea.lastCoordinate, reverseGeocode())
     //onMarkerGeocodeChanged: markerHasChanged(coordinate, address);

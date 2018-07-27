@@ -4,7 +4,7 @@ import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 
 Item {
-    id: getCoordinateForm
+    id: coordinateAddress
     property var coordinate
     property var address
     signal closeForm
@@ -34,7 +34,8 @@ Item {
                 font.bold: true
             }
         }
-        Column {
+
+        Column { //coordinate Column
             spacing: 10
             Text {
                 text: "Coordinate:"
@@ -44,13 +45,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
                     text: "Latitude:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: latitude
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -58,13 +60,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
                     text: "Longitude:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: longitude
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -72,7 +75,7 @@ Item {
             }
         }
 
-        Column {
+        Column { //Address Column
             spacing: 10
             Text {
                 text: "Address:"
@@ -82,13 +85,30 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "district:"
+                    text: "Street:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: street
+                    text: "0.00"
+                    font.pixelSize: 20
+                }
+            }
+
+            Row {
+                spacing: 10
+                anchors.left: parent.left
+                anchors.leftMargin: coordinateAddress.height / 7
+                Text {
+                    text: "District:"
+                    font.pixelSize: 20
+                    font.bold: true
+                }
+                Text {
+                    id: district
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -96,13 +116,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "city:"
+                    text: "City:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: city
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -111,13 +132,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "country:"
+                    text: "Country:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: country
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -125,13 +147,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "state:"
+                    text: "State:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: state
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -140,13 +163,14 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "countryCode:"
+                    text: "Country Code:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: countryCode
                     text: "0.00"
                     font.pixelSize: 20
                 }
@@ -154,23 +178,24 @@ Item {
             Row {
                 spacing: 10
                 anchors.left: parent.left
-                anchors.leftMargin: getCoordinateForm.height / 7
+                anchors.leftMargin: coordinateAddress.height / 7
                 Text {
-                    text: "postalCode:"
+                    text: "Postal Code:"
                     font.pixelSize: 20
                     font.bold: true
                 }
                 Text {
+                    id: postalCode
                     text: "0.00"
                     font.pixelSize: 20
                 }
 
         }
         }
-        Row {
+        Row { //Button
             spacing: 10
             anchors.left: parent.left
-            anchors.leftMargin: getCoordinateForm.height / 7
+            anchors.leftMargin: coordinateAddress.height / 7
             Button {
                 text: "Copy"
                 font.pixelSize: 20
@@ -178,15 +203,28 @@ Item {
             Button {
                 text: "Ok"
                 font.pixelSize: 20
+                onClicked: closeForm()
             }
         }
-        Button{}
-        Button{}
-        Button{}
-        Button{}
-        Button{}
-        Button{}
+
+        Item {
+            id: space
+            Layout.fillHeight: parent.height/2
+        }
     }
 
+    Component.onCompleted:  {
+        latitude.text = coordinate.latitude.toString()
+        longitude.text = coordinate.longitude.toString()
+        street.text = address.street
+        district.text = address.district
+        city.text = address.city
+        country.text = address.country
+        state.text = address.state
+        countryCode.text = address.countryCode
+        country.text = address.country
+        postalCode.text = address.postalCode
+
+    }
 
 }

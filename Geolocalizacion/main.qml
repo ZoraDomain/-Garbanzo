@@ -144,8 +144,7 @@ Item {
                 map.addBus();
                 break;
             case "getCoordinate":
-                stackView.push({item: Qt.resolvedUrl("/GetCoordinateForm.qml")})
-                stackView.currentItem.closeForm.connect(stackView.closeForm)
+                 map.resquestCoordinateAndAddress()
                 break;
             }
     }
@@ -213,18 +212,6 @@ Item {
         }
     }
 
-    LoadingView {
-        id: loadingView
-        visible: true
-        onClose: stackView.pop(page)
-
-        function show() {
-            stackView.push(loadingView)
-            loadingView.begin()
-        }
-
-    }
-
     Drawer {
         id: notifyDrawer
         width: 300
@@ -282,6 +269,19 @@ Item {
             id: page
         }
 
+        function showCoordinateAndAddress(coordinate, address) {
+            stackView.push({item: Qt.resolvedUrl("/Coordinate&Address.qml"), properties: {
+                                                                                "coordinate" : coordinate,
+                                                                                "address" : address
+                               }})
+            stackView.currentItem.closeForm.connect(stackView.closeForm)
+        }
+
+        function showLoadingView() {
+            stackView.push({item: Qt.resolvedUrl("/loadingView.qml")})
+            stackView.currentItem.begin()
+        }
+
         function closeForm() {
             pop(page)
         }
@@ -313,6 +313,9 @@ Item {
                 //other signal
                 onShowContextMenu: mapContextMenu.show(coordinate)
                 onMouseClicked: io.updateCoordinate(infoCoordinate)
+
+                //menu
+                onCoordinateAndAddressReady: stackView.showCoordinateAndAddress(coordinate, address)
 
                 Component.onCompleted: {
                     if (mapComponent.status == Component.Ready)
